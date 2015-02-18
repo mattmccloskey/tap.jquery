@@ -1,0 +1,25 @@
+{
+  "name": "tap.jquery",
+  "version": "1.0.0",
+  "homepage": "https://github.com/mattmccloskey/tap.jquery",
+  "authors": [
+    "Matt McCloskey <mattmccloskey@mac.com>"
+  ],
+  "description": "A custom tap event for jQuery + automatic click -> tap conversion",
+  "keywords": [
+    "tap",
+    "touch",
+    "jquery"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.3"
+  }
+}
