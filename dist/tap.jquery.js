@@ -53,7 +53,9 @@
 	};
 	
 	// Convert clicks to taps
-	if(typeof convertClicksToTaps == "undefined" || convertClicksToTaps !== false)
+	var isTouch = 'ontouchstart' in window || 'msmaxtouchpoints' in window.navigator;
+
+	if(isTouch && typeof convertClicksToTaps == "undefined" || convertClicksToTaps !== false)
 	{
 		var onFunc = $.fn.on,
 			offFunc = $.fn.off,
