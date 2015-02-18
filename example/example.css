@@ -13,4 +13,6 @@ body {
 }
 .alert {
 	display: none;
+	font-size: 3em;
+	font-weight: bold;
 }

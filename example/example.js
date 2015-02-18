@@ -26,5 +26,6 @@ $(function(){
 		tapsAreOn = !tapsAreOn;
 	});
 
+	// Taps start on
 	tapsOn();
 });

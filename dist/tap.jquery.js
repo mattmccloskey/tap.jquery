@@ -1,16 +1,19 @@
 /**
  * Custom tap event for jQuery
+ * https://github.com/mattmccloskey/tap.jquery
+ * Released under the MIT license
  */
+
 (function($)
 {
-
+	// Tap event
 	$.event.special.tap = {
 		enabled: true,
 		setup: function() 
 		{
 			var startEvent = {},
 				endEvent = {},
-				buffer = 3,
+				buffer = 3,	// How far the finger has to move before it's no longer a tap
 				touchMoved = false;
 			$(this).on({
 				'touchstart': function(e) 
@@ -37,7 +40,7 @@
 					} 
 					else
 					{ 
-						/* It was a drag, not a touch */
+						/* It was a drag or mistake, not a tap */
 					} 
 				}
 			});
@@ -52,34 +55,26 @@
 	// Convert clicks to taps
 	if(typeof convertClicksToTaps == "undefined" || convertClicksToTaps !== false)
 	{
-		console.log("convert");
 		var onFunc = $.fn.on,
 			offFunc = $.fn.off,
-			replaceEventName = function (eventName) 
+			replaceClickWithTap = function() 
 			{
-				if (eventName.slice(0, 5) == 'click') 
+				if(typeof arguments[0] === 'string' && arguments[0].slice(0, 5) === 'click')
 				{
-					return eventName.replace('click', 'tap');
+					arguments[0] = arguments[0].replace('click', 'tap');
 				}
-				return eventName;
+				return arguments;
 			};
 
 		$.fn.on = function() 
 		{
-			if(typeof arguments[0] === "string")
-			{
-				arguments[0] = replaceEventName(arguments[0]);
-			}
-			return onFunc.apply(this, arguments);
+			return onFunc.apply(this, replaceClickWithTap.apply(this, arguments));
 		};
 
 		$.fn.off = function() 
 		{
-			if(typeof arguments[0] === "string")
-			{
-				arguments[0] = replaceEventName(arguments[0]);
-			}
-			return offFunc.apply(this, arguments);
+			return offFunc.apply(this, replaceClickWithTap.apply(this, arguments));
 		};
 	}
+
 })(jQuery);
