@@ -3,7 +3,6 @@
  * https://github.com/mattmccloskey/tap.jquery
  * Released under the MIT license
  */
-
 (function($)
 {
 	// Tap event
@@ -35,7 +34,7 @@
 				{ 
 					if( ! touchMoved)
 					{ 
-						$(this).trigger('tap', e); 
+						$(e.target).trigger('tap', e); 
 					} 
 					else
 					{ 
@@ -54,7 +53,7 @@
 	// Convert clicks to taps
 	var isTouch = 'ontouchstart' in window || 'msmaxtouchpoints' in window.navigator;
 
-	if(isTouch && typeof convertClicksToTaps == "undefined" || convertClicksToTaps !== false)
+	if(isTouch && (typeof convertClicksToTaps == "undefined" || convertClicksToTaps !== false))
 	{
 		var onFunc = $.fn.on,
 			offFunc = $.fn.off,
