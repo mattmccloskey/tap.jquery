@@ -17,8 +17,7 @@
 				touchMoved = false;
 			$(this).on({
 				'touchstart': function(e) 
-				{ 
-					e.preventDefault(); 
+				{
 					touchMoved = false;
 					startEvent.x = e.originalEvent.touches[0].pageX; 
 					startEvent.y = e.originalEvent.touches[0].pageY;
