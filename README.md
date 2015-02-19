@@ -3,7 +3,7 @@ A custom tap event for jQuery + automatic click to tap conversion
 
 #### Package Managers
 ````
-//Bower
+// Bower
 bower install --save tap-jquery
 ````
 #### Example
@@ -18,3 +18,9 @@ $(el).on('click', function(e){
     // if it's a touch device, this will fire on tap too!
 });
  ```
+
+If you want you can turn off click to tap conversion
+```javascript
+// Put this before your tap.jquery.js script
+window.convertClicksToTaps = false;
+```
