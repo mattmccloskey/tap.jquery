@@ -68,12 +68,16 @@
 
 		$.fn.on = function() 
 		{
+			// Since we're replacing click with tap, click will still fire by default, causing href="#" to modify the URL bar.
+			// To prevent this, add preventDefault on click event.
 			if(typeof arguments[0] === 'string' && arguments[0].slice(0, 5) === 'click')
 			{
-				// Since we're replacing click with tap, click will still fire by default, causing href="#" to modify the URL bar.
-				// To prevent this, add preventDefault on click event.
-				$(this)[0].addEventListener('click', function(e) {
-					e.preventDefault();
+				this.each(function () 
+				{
+					this.addEventListener('click', function(e) 
+					{
+						e.preventDefault();
+					});
 				});
 			}
 			return onFunc.apply(this, replaceClickWithTap.apply(this, arguments));
