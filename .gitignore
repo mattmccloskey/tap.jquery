@@ -3,7 +3,3 @@
 node_modules
 
 bower_components
-
-.jscsrc
-
-.jshintrc
