@@ -1,3 +1,4 @@
+
 /**
  * Custom tap event for jQuery
  * https://github.com/mattmccloskey/tap.jquery
@@ -12,7 +13,7 @@
 		{
 			var startEvent = {},
 				endEvent = {},
-				buffer = 3,	// How far the finger has to move before it's no longer a tap
+				buffer = 8,	// How far the finger has to move before it's no longer a tap
 				touchMoved = false;
 			$(this).on({
 				'touchstart.tapevents': function(e) 
@@ -33,7 +34,7 @@
 				'touchend.tapevents': function(e) 
 				{ 
 					if( ! touchMoved)
-					{ 
+					{
 						$(e.target).trigger('tap', e); 
 					} 
 					else
@@ -72,13 +73,24 @@
 			// To prevent this, add preventDefault on click event.
 			if(typeof arguments[0] === 'string' && arguments[0].slice(0, 5) === 'click')
 			{
-				this.each(function () 
+				var args = Array.prototype.slice.call(arguments);
+					i = 0, l = args.length;
+				for (i; i < l; i++)
 				{
-					this.addEventListener('click', function(e) 
+					if(typeof args[i] === "function")
 					{
-						e.preventDefault();
-					});
-				});
+						args[i] = function(e) 
+						{
+							if(e.currentTarget.tagName.toLowerCase() === 'a' && e.currentTarget.getAttribute('href'))
+							{
+								e.preventDefault();
+							}
+						};
+						break;
+					}
+				}
+				args[0] = 'click.tapreplaced';
+				onFunc.apply(this, args);
 			}
 			return onFunc.apply(this, replaceClickWithTap.apply(this, arguments));
 		};
