@@ -15,7 +15,7 @@
 				buffer = 3,	// How far the finger has to move before it's no longer a tap
 				touchMoved = false;
 			$(this).on({
-				'touchstart': function(e) 
+				'touchstart.tapevents': function(e) 
 				{
 					touchMoved = false;
 					startEvent.x = e.originalEvent.touches[0].pageX; 
