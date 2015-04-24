@@ -14,10 +14,12 @@
 			var startEvent = {},
 				endEvent = {},
 				buffer = 8,	// How far the finger has to move before it's no longer a tap
+				touchStarted = false,
 				touchMoved = false;
 			$(this).on({
 				'touchstart.tapevents': function(e) 
 				{
+					touchStarted = true;
 					touchMoved = false;
 					startEvent.x = e.originalEvent.touches[0].pageX; 
 					startEvent.y = e.originalEvent.touches[0].pageY;
@@ -33,7 +35,7 @@
 				},
 				'touchend.tapevents': function(e) 
 				{ 
-					if( ! touchMoved)
+					if(touchStarted && ! touchMoved)
 					{
 						$(e.target).trigger('tap', e); 
 					} 
@@ -41,6 +43,9 @@
 					{ 
 						/* It was a drag or mistake, not a tap */
 					} 
+
+					// reset touchStarted
+					touchStarted = false;
 				}
 			});
 		},
@@ -60,7 +65,7 @@
 			offFunc = $.fn.off,
 			replaceClickWithTap = function() 
 			{
-				if(typeof arguments[0] === 'string' && arguments[0].slice(0, 5) === 'click')
+				if(typeof arguments[0] === 'string' && arguments[0].slice(0, 5) === 'click' && arguments[0].indexOf('notaps') == -1)
 				{
 					arguments[0] = arguments[0].replace('click', 'tap');
 				}
@@ -71,7 +76,7 @@
 		{
 			// Since we're replacing click with tap, click will still fire by default, causing href="#" to modify the URL bar.
 			// To prevent this, add preventDefault on click event.
-			if(typeof arguments[0] === 'string' && arguments[0].slice(0, 5) === 'click')
+			if(typeof arguments[0] === 'string' && arguments[0].slice(0, 5) === 'click' && arguments[0].indexOf('notaps') == -1)
 			{
 				var args = Array.prototype.slice.call(arguments);
 					i = 0, l = args.length;
