@@ -5,6 +5,9 @@
  */
 (function($)
 {
+	// Convert clicks to taps
+	var hasTouch = 'ontouchstart' in window || 'msmaxtouchpoints' in window.navigator;
+
 	// Tap event
 	$.event.special.tap = {
 		enabled: true,
@@ -53,8 +56,9 @@
 				}
 				,
 				'click.tapevents.notaps': function(e) {
-					// Check to see if there was a touch. If not, and we have touch, then we need to fire click.
-					if(wasTouched === false && ('ontouchstart' in window || 'msmaxtouchpoints' in window.navigator))
+					// Check to see if there was a touch. 
+					// If there wasn't a touch, but we have touch ability, there must be mouse input too so we need to fire on click
+					if(wasTouched === false && hasTouch)
 					{
 						$(e.target).trigger('tap', e);
 					}
@@ -70,11 +74,8 @@
 			return $(this).off('.tapevents');
 		}
 	};
-	
-	// Convert clicks to taps
-	var isTouch = 'ontouchstart' in window || 'msmaxtouchpoints' in window.navigator;
 
-	if(isTouch && (typeof convertClicksToTaps == "undefined" || convertClicksToTaps !== false))
+	if(hasTouch && (typeof convertClicksToTaps == "undefined" || convertClicksToTaps !== false))
 	{
 		var onFunc = $.fn.on,
 			offFunc = $.fn.off,
