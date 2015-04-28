@@ -1,6 +1,6 @@
 {
   "name": "tap.jquery",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "A custom tap event for jQuery + automatic click -> tap conversion",
   "main": "index.js",
   "scripts": {

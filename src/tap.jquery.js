@@ -53,9 +53,9 @@
 
 					// reset touchStarted
 					touchStarted = false;
-				}
-				,
-				'click.tapevents.notaps': function(e) {
+				},
+				'click.tapevents.notaps': function(e)
+				{
 					// Check to see if there was a touch. 
 					// If there wasn't a touch, but we have touch ability, there must be mouse input too so we need to fire on click
 					if(wasTouched === false && hasTouch)

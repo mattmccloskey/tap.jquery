@@ -1,4 +1,3 @@
-
 /**
  * Custom tap event for jQuery
  * https://github.com/mattmccloskey/tap.jquery
@@ -6,6 +5,9 @@
  */
 (function($)
 {
+	// Convert clicks to taps
+	var hasTouch = 'ontouchstart' in window || 'msmaxtouchpoints' in window.navigator;
+
 	// Tap event
 	$.event.special.tap = {
 		enabled: true,
@@ -13,14 +15,16 @@
 		{
 			var startEvent = {},
 				endEvent = {},
-				buffer = 8,	// How far the finger has to move before it's no longer a tap
+				buffer = 5,	// How far the finger has to move before it's no longer a tap
 				touchStarted = false,
-				touchMoved = false;
+				touchMoved = false,
+				wasTouched = false;
 			$(this).on({
 				'touchstart.tapevents': function(e) 
 				{
 					touchStarted = true;
 					touchMoved = false;
+					wasTouched = true;
 					startEvent.x = e.originalEvent.touches[0].pageX; 
 					startEvent.y = e.originalEvent.touches[0].pageY;
 				},
@@ -42,10 +46,25 @@
 					else
 					{ 
 						/* It was a drag or mistake, not a tap */
+
+						// Reset wasTouched, since click won't be fired in this case
+						wasTouched = false;
 					} 
 
 					// reset touchStarted
 					touchStarted = false;
+				},
+				'click.tapevents.notaps': function(e)
+				{
+					// Check to see if there was a touch. 
+					// If there wasn't a touch, but we have touch ability, there must be mouse input too so we need to fire on click
+					if(wasTouched === false && hasTouch)
+					{
+						$(e.target).trigger('tap', e);
+					}
+
+					// Reset wasTouched
+					wasTouched = false;
 				}
 			});
 		},
@@ -55,11 +74,8 @@
 			return $(this).off('.tapevents');
 		}
 	};
-	
-	// Convert clicks to taps
-	var isTouch = 'ontouchstart' in window || 'msmaxtouchpoints' in window.navigator;
 
-	if(isTouch && (typeof convertClicksToTaps == "undefined" || convertClicksToTaps !== false))
+	if(hasTouch && (typeof convertClicksToTaps == "undefined" || convertClicksToTaps !== false))
 	{
 		var onFunc = $.fn.on,
 			offFunc = $.fn.off,
