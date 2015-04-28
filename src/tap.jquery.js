@@ -1,4 +1,3 @@
-
 /**
  * Custom tap event for jQuery
  * https://github.com/mattmccloskey/tap.jquery
@@ -13,14 +12,16 @@
 		{
 			var startEvent = {},
 				endEvent = {},
-				buffer = 8,	// How far the finger has to move before it's no longer a tap
+				buffer = 5,	// How far the finger has to move before it's no longer a tap
 				touchStarted = false,
-				touchMoved = false;
+				touchMoved = false,
+				wasTouched = false;
 			$(this).on({
 				'touchstart.tapevents': function(e) 
 				{
 					touchStarted = true;
 					touchMoved = false;
+					wasTouched = true;
 					startEvent.x = e.originalEvent.touches[0].pageX; 
 					startEvent.y = e.originalEvent.touches[0].pageY;
 				},
@@ -42,10 +43,24 @@
 					else
 					{ 
 						/* It was a drag or mistake, not a tap */
+
+						// Reset wasTouched, since click won't be fired in this case
+						wasTouched = false;
 					} 
 
 					// reset touchStarted
 					touchStarted = false;
+				}
+				,
+				'click.tapevents.notaps': function(e) {
+					// Check to see if there was a touch. If not, and we have touch, then we need to fire click.
+					if(wasTouched === false && ('ontouchstart' in window || 'msmaxtouchpoints' in window.navigator))
+					{
+						$(e.target).trigger('tap', e);
+					}
+
+					// Reset wasTouched
+					wasTouched = false;
 				}
 			});
 		},
